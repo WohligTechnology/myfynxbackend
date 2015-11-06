@@ -708,7 +708,15 @@ $timestamp=new DateTime();
 			return  1;
     }
 
-    
+     public function getUserDropDown()
+    {
+        $query = $this->db->query('SELECT * FROM `user`  ORDER BY `id` ASC')->result();
+        foreach ($query as $row) {
+            $return[$row->id] = $row->name;
+        }
+
+        return $return;
+    }
     function changepasswordfront($email, $oldpassword, $newpassword, $confirmpassword) 
     {
         $oldpassword=md5($oldpassword);

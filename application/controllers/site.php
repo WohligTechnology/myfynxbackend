@@ -25,10 +25,48 @@ class Site extends CI_Controller
 		//$access = array("1","2");
 		$access = array("1","2");
 		$this->checkaccess($access);
+        $remainingproducts=$this->config_model->getremainingproducts();
+        $data['remainingproducts']=$this->config_model->getremainingproducts();
+          $data["base_url"]=site_url("site/viewdashboardjson?id=".$remainingproducts);
+        
 		$data[ 'page' ] = 'dashboard';
 		$data[ 'title' ] = 'Welcome';
 		$this->load->view( 'template', $data );	
 	}
+      function viewdashboardjson()
+    {
+        $remainingproducts=$this->input->get('id');
+        $elements=array();
+        $elements[0]=new stdClass();
+        $elements[0]->field="`product`.`id`";
+        $elements[0]->sort="1";
+        $elements[0]->header="ID";
+        $elements[0]->alias="id";
+        
+        $elements[1]=new stdClass();
+        $elements[1]->field="`product`.`name`";
+        $elements[1]->sort="1";
+        $elements[1]->header="name";
+        $elements[1]->alias="name";
+        
+        
+        $search=$this->input->get_post("search");
+        $pageno=$this->input->get_post("pageno");
+        $orderby=$this->input->get_post("orderby");
+        $orderorder=$this->input->get_post("orderorder");
+        $maxrow=$this->input->get_post("maxrow");
+        if($maxrow=="")
+        {
+            $maxrow=20;
+        }
+        if($orderby=="")
+        {
+            $orderby="id";
+            $orderorder="ASC";
+        }
+        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `product`","WHERE `product`.`quantity` < $remainingproducts");
+        $this->load->view("json",$data);
+    }
 	public function createuser()
 	{
 		$access = array("1");
@@ -2683,6 +2721,7 @@ class Site extends CI_Controller
 		$data[ 'country' ] =$this->user_model->getcountry();
 		$data[ 'orderstatus' ] =$this->order_model->getorderstatus();
 		$data[ 'currency' ] =$this->currency_model->getcurrencydropdown();
+		$data[ 'design' ] =$this->designs_model->getdesigndropdown();
 		$data['before']=$this->order_model->beforeedit($this->input->get('id'));
 		$data['page']='createorder';
 		//$data['page2']='block/orderblock';
@@ -2741,7 +2780,8 @@ class Site extends CI_Controller
 			$trackingcode=$this->input->post('trackingcode');
 			$billingcontact=$this->input->post('billingcontact');
 			$shippingcontact=$this->input->post('shippingcontact');
-			if(($this->order_model->createorder($user,$firstname,$lastname,$email,$billingaddress,$billingcity,$billingstate,$billingcountry,$shippingaddress,$shippingcity,$shippingstate,$shippingcountry,$shippingpincode,$currency,$orderstatus,$trackingcode,$billingcontact,$shippingcontact))==0)
+			$design=$this->input->post('design');
+			if(($this->order_model->createorder($user,$firstname,$lastname,$email,$billingaddress,$billingcity,$billingstate,$billingcountry,$shippingaddress,$shippingcity,$shippingstate,$shippingcountry,$shippingpincode,$currency,$orderstatus,$trackingcode,$billingcontact,$shippingcontact,$design))==0)
 				$data['alerterror']="Order could not be Created.";
 			else
 				$data['alertsuccess']="Order  edited Successfully.";
@@ -2821,7 +2861,8 @@ class Site extends CI_Controller
 			$trackingcode=$this->input->post('trackingcode');
 			$billingcontact=$this->input->post('billingcontact');
 			$shippingcontact=$this->input->post('shippingcontact');
-			if(($this->order_model->edit($id,$user,$firstname,$lastname,$email,$billingaddress,$billingcity,$billingstate,$billingcountry,$shippingaddress,$shippingcity,$shippingstate,$shippingcountry,$shippingpincode,$currency,$orderstatus,$trackingcode,$billingcontact,$shippingcontact))==0)
+            $design=$this->input->post('design');
+			if(($this->order_model->edit($id,$user,$firstname,$lastname,$email,$billingaddress,$billingcity,$billingstate,$billingcountry,$shippingaddress,$shippingcity,$shippingstate,$shippingcountry,$shippingpincode,$currency,$orderstatus,$trackingcode,$billingcontact,$shippingcontact,$design))==0)
 				$data['alerterror']="Order could not be edited.";
 			else
             {
@@ -4737,47 +4778,47 @@ class Site extends CI_Controller
     
     // about us & clients
     
-      public function viewaboutus()
+      public function viewdesigns()
     {
         $access=array("1");
         $this->checkaccess($access);
-        $data["page"]="viewaboutus";
-        $data["base_url"]=site_url("site/viewaboutusjson");
-        $data["title"]="View aboutus";
+        $data["page"]="viewdesigns";
+        $data["base_url"]=site_url("site/viewdesignsjson");
+        $data["title"]="View designs";
         $this->load->view("template",$data);
     }
-    function viewaboutusjson()
+    function viewdesignsjson()
     {
         $elements=array();
         $elements[0]=new stdClass();
-        $elements[0]->field="`about`.`id`";
+        $elements[0]->field="`designs`.`id`";
         $elements[0]->sort="1";
         $elements[0]->header="ID";
         $elements[0]->alias="id";
         
         $elements[1]=new stdClass();
-        $elements[1]->field="`about`.`image`";
+        $elements[1]->field="`user`.`name`";
         $elements[1]->sort="1";
-        $elements[1]->header="image";
-        $elements[1]->alias="image";
+        $elements[1]->header="fromuser";
+        $elements[1]->alias="fromuser";
         
         $elements[2]=new stdClass();
-        $elements[2]->field="`about`.`order`";
+        $elements[2]->field="`designs`.`image`";
         $elements[2]->sort="1";
-        $elements[2]->header="order";
-        $elements[2]->alias="order";
+        $elements[2]->header="image";
+        $elements[2]->alias="image";
         
         $elements[3]=new stdClass();
-        $elements[3]->field="`about`.`status`";
+        $elements[3]->field="`designs`.`status`";
         $elements[3]->sort="1";
         $elements[3]->header="status";
         $elements[3]->alias="status";
         
         $elements[4]=new stdClass();
-        $elements[4]->field="`about`.`title`";
+        $elements[4]->field="`designs`.`timestamp`";
         $elements[4]->sort="1";
-        $elements[4]->header="title";
-        $elements[4]->alias="title";
+        $elements[4]->header="timestamp";
+        $elements[4]->alias="timestamp";
         
         $search=$this->input->get_post("search");
         $pageno=$this->input->get_post("pageno");
@@ -4793,20 +4834,21 @@ class Site extends CI_Controller
             $orderby="id";
             $orderorder="ASC";
         }
-        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `about`");
+        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `designs` LEFT OUTER JOIN `user` ON `user`.`id`=`designs`.`fromuser`");
         $this->load->view("json",$data);
     }
 
-	public function createaboutus()
+	public function createdesigns()
 	{
 		$access = array("1");
 		$this->checkaccess($access);
-        $data[ 'status' ] =$this->user_model->getstatusdropdown();
-		$data[ 'page' ] = 'createaboutus';
-		$data[ 'title' ] = 'Create aboutus';
+        $data[ 'status' ] =$this->designs_model->getstatusdropdown();
+        $data[ 'fromuser' ] =$this->user_model->getUserDropDown();
+		$data[ 'page' ] = 'createdesigns';
+		$data[ 'title' ] = 'Create designs';
 		$this->load->view( 'template', $data );	
 	}
-	function createaboutussubmit()
+	function createdesignssubmit()
 	{
 		$access = array("1");
 		$this->checkaccess($access);
@@ -4815,14 +4857,15 @@ class Site extends CI_Controller
 		if($this->form_validation->run() == FALSE)	
 		{
 			$data['alerterror'] = validation_errors();
-			$data[ 'page' ] = 'createaboutus';
-			$data[ 'title' ] = 'Create aboutus';
+            $data[ 'status' ] =$this->designs_model->getstatusdropdown();
+            $data[ 'fromuser' ] =$this->user_model->getUserDropDown();
+			$data[ 'page' ] = 'createdesigns';
+			$data[ 'title' ] = 'Create designs';
 			$this->load->view('template',$data);
 		}
 		else
 		{
-			$title=$this->input->post('title');
-			$order=$this->input->post('order');
+			$fromuser=$this->input->post('fromuser');
 			$status=$this->input->post('status');
             
 			$config['upload_path'] = './uploads/';
@@ -4836,36 +4879,37 @@ class Site extends CI_Controller
 				$image=$uploaddata['file_name'];
 			}
             
-			if($this->aboutus_model->createaboutus($order,$image,$status,$title)==0)
-			$data['alerterror']="New aboutus could not be created.";
+			if($this->designs_model->createdesigns($fromuser,$image,$status)==0)
+			$data['alerterror']="New designs could not be created.";
 			else
-			$data['alertsuccess']="aboutus  created Successfully.";
-			$data['redirect']="site/viewaboutus";
+			$data['alertsuccess']="designs  created Successfully.";
+			$data['redirect']="site/viewdesigns";
 			//$data['other']="template=$template";
 			$this->load->view("redirect",$data);
 		}
 	}
-//	function viewaboutus()
+//	function viewdesigns()
 //	{
 //		$access = array("1");
 //		$this->checkaccess($access);
-//		$data['table']=$this->aboutus_model->viewaboutus();
-//		$data['page']='viewaboutus';
-//		$data['title']='View aboutus';
+//		$data['table']=$this->designs_model->viewdesigns();
+//		$data['page']='viewdesigns';
+//		$data['title']='View designs';
 //		$this->load->view('template',$data);
 //	}
-	function editaboutus()
+	function editdesigns()
 	{
 		$access = array("1");
 		$this->checkaccess($access);
-		$data['before']=$this->aboutus_model->beforeeditaboutus($this->input->get('id'));
-		$data[ 'status' ] =$this->user_model->getstatusdropdown();
-//		$data['page2']='block/aboutusblock';
-		$data['page']='editaboutus';
-		$data['title']='Edit aboutus';
+		$data['before']=$this->designs_model->beforeeditdesigns($this->input->get('id'));
+		$data[ 'status' ] =$this->designs_model->getstatusdropdown();
+        $data[ 'fromuser' ] =$this->user_model->getUserDropDown();
+//		$data['page2']='block/designsblock';
+		$data['page']='editdesigns';
+		$data['title']='Edit designs';
 		$this->load->view('template',$data);
 	}
-	function editaboutussubmit()
+	function editdesignssubmit()
 	{
 		$access = array("1");
 		$this->checkaccess($access);
@@ -4874,17 +4918,19 @@ class Site extends CI_Controller
 		if($this->form_validation->run() == FALSE)	
 		{
 			$data['alerterror'] = validation_errors();
-			$data['before']=$this->aboutus_model->beforeeditaboutus($this->input->post('id'));
-			$data['page']='editaboutus';
-			$data['title']='Edit aboutus';
+            $data[ 'status' ] =$this->designs_model->getstatusdropdown();
+            $data[ 'fromuser' ] =$this->user_model->getUserDropDown();
+			$data['before']=$this->designs_model->beforeeditdesigns($this->input->post('id'));
+			$data['page']='editdesigns';
+			$data['title']='Edit designs';
 			$this->load->view('template',$data);
 		}
 		else
 		{
 			$id=$this->input->post('id');
-			$title=$this->input->post('title');
-			$order=$this->input->post('order');
+			$fromuser=$this->input->post('fromuser');
 			$status=$this->input->post('status');
+			$timestamp=$this->input->post('timestamp');
             
 			$config['upload_path'] = './uploads/';
 			$config['allowed_types'] = 'gif|jpg|png|jpeg';
@@ -4899,27 +4945,97 @@ class Site extends CI_Controller
             
             if($image=="")
             {
-            $image=$this->aboutus_model->getaboutuslogobyid($id);
+            $image=$this->designs_model->getdesignslogobyid($id);
                // print_r($image);
                 $image=$image->image;
             }
             
-			if($this->aboutus_model->editaboutus($id,$order,$image,$status,$title)==0)
-			$data['alerterror']="aboutus Editing was unsuccesful";
+			if($this->designs_model->editdesigns($id,$fromuser,$image,$timestamp,$status)==0)
+			$data['alerterror']="designs Editing was unsuccesful";
 			else
-			$data['alertsuccess']="aboutus edited Successfully.";
-			$data['redirect']="site/viewaboutus";
+			$data['alertsuccess']="designs edited Successfully.";
+			$data['redirect']="site/viewdesigns";
 			$this->load->view("redirect",$data);
 		}
 	}
-	function deleteaboutus()
+	function deletedesigns()
 	{
 		$access = array("1");
 		$this->checkaccess($access);
-		$this->aboutus_model->deleteaboutus($this->input->get('id'));
-		$data['alertsuccess']="aboutus Deleted Successfully";
-        $data['redirect']="site/viewaboutus";
+		$this->designs_model->deletedesigns($this->input->get('id'));
+		$data['alertsuccess']="designs Deleted Successfully";
+        $data['redirect']="site/viewdesigns";
         $this->load->view("redirect",$data);
+	}
+    
+    
+    // CONFIG
+    
+    public function viewconfig()
+    {
+        $access=array("1");
+        $this->checkaccess($access);
+        $data["page"]="viewconfig";
+        $data["base_url"]=site_url("site/viewconfigjson");
+        $data["title"]="View config";
+        $this->load->view("template",$data);
+    }
+    function viewconfigjson()
+    {
+        $elements=array();
+        $elements[0]=new stdClass();
+        $elements[0]->field="`config`.`id`";
+        $elements[0]->sort="1";
+        $elements[0]->header="ID";
+        $elements[0]->alias="id";
+        
+        $elements[2]=new stdClass();
+        $elements[2]->field="`config`.`text`";
+        $elements[2]->sort="1";
+        $elements[2]->header="text";
+        $elements[2]->alias="text";
+        
+        
+        $search=$this->input->get_post("search");
+        $pageno=$this->input->get_post("pageno");
+        $orderby=$this->input->get_post("orderby");
+        $orderorder=$this->input->get_post("orderorder");
+        $maxrow=$this->input->get_post("maxrow");
+        if($maxrow=="")
+        {
+            $maxrow=20;
+        }
+        if($orderby=="")
+        {
+            $orderby="id";
+            $orderorder="ASC";
+        }
+        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `config`");
+        $this->load->view("json",$data);
+    }
+    
+    function editconfig()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data['before']=$this->config_model->beforeeditconfig($this->input->get('id'));
+//		$data['page2']='block/configblock';
+		$data['page']='editconfig';
+		$data['title']='Edit config';
+		$this->load->view('template',$data);
+	}
+	function editconfigsubmit()
+	{
+			$id=$this->input->post('id');
+			$text=$this->input->post('text');
+			$content=$this->input->post('content');
+			if($this->config_model->editconfig($id,$text,$content)==0)
+			$data['alerterror']="config Editing was unsuccesful";
+			else
+			$data['alertsuccess']="config edited Successfully.";
+			$data['redirect']="site/viewconfig";
+			$this->load->view("redirect",$data);
+		
 	}
     
     
