@@ -26,11 +26,11 @@ header("Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-ch
 
 if(isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Google App Engine') !== false)
 {
-    define('ENVIRONMENT', 'testing');
+    define('ENVIRONMENT', 'development');
 }
 else
 {
-    define('ENVIRONMENT', 'testing');
+    define('ENVIRONMENT', 'development');
 }
 
 /*

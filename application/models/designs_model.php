@@ -13,8 +13,25 @@ class designs_model extends CI_Model
             'status' => $status
 		);
 		$query=$this->db->insert( 'designs', $data );
+        $id=$this->db->insert_id();
+        
+        // CALCULATE NO OF COUNT
+        
+        echo "from user  ";
+        echo $fromuser;
+        $query1=$this->db->query("SELECT COUNT(*) as `count` FROM `designs` WHERE `fromuser`=$fromuser")->row();
+        $designcount=$query1->count;
+        
+        echo "design count ";
+        echo $designcount;
+        $data  = array(
+			'noofdesigns' => $designcount
+		);
+		$this->db->where( 'id', $fromuser );
+		$this->db->update( 'designers', $data );
 		return  1;
 	}
+    
 	function viewdesigns()
 	{
 		$query=$this->db->query("SELECT `designs`.`id`,`designs`.`order`,`designs`.`title`,`designs`.`image`,`designs`.`status` FROM `designs` 

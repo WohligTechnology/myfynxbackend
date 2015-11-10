@@ -33,6 +33,7 @@
                       </div>
                     </div>
 			
+<!--
                     <div class=" form-group">
                       <label class="col-sm-2 control-label">Types</label>
                       <div class="col-sm-4">
@@ -42,6 +43,16 @@
                         ?>
                       </div>
                     </div>
+-->
+                   <div class=" form-group">
+					  <label class="col-sm-2 control-label">Type</label>
+					  <div class="col-sm-4">
+						<?php
+							
+							echo form_dropdown('type',$type,set_value('type',$before['product']->type),'class="chzn-select form-control" 	data-placeholder="Choose a Accesslevel..."');
+						?>
+					  </div>
+					</div>
                     <div class="form-group">
 						<label class="col-sm-2 control-label">Type Name</label>
 						<div class="col-sm-4">
@@ -117,6 +128,7 @@
 						</div>
 					</div>
 					</div>
+<!--
 					<div class="form-group">
 						<label class="col-sm-2 control-label">Category</label>
 						<div class="col-sm-4">
@@ -125,6 +137,25 @@
 								 
 							?>
 						</div>
+					</div>
+-->
+                <div class=" form-group">
+					  <label class="col-sm-2 control-label">Category</label>
+					  <div class="col-sm-4">
+						<?php
+							
+							echo form_dropdown('category',$category,set_value('category',$before['product']->category),'class="chzn-select form-control" 	data-placeholder="Choose a Accesslevel..."');
+						?>
+					  </div>
+					</div> 
+                  <div class=" form-group">
+					  <label class="col-sm-2 control-label">subcategory</label>
+					  <div class="col-sm-4">
+						<?php
+							
+							echo form_dropdown('subcategory',$subcategory,set_value('subcategory',$before['product']->subcategory),'class="chzn-select form-control" 	data-placeholder="Choose a Accesslevel..."');
+						?>
+					  </div>
 					</div>
 					
 					<div class="form-group">

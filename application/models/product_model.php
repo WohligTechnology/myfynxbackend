@@ -25,7 +25,7 @@ class Product_model extends CI_Model
 //        $query=$this->db->query("INSERT INTO `userwishlist`(`user`,`product`) VALUES ('$user','$product')");
 //        return $query;
     }
-	public function createproduct($name,$sku,$description,$url,$visibility,$price,$wholesaleprice,$firstsaleprice,$secondsaleprice,$specialpricefrom,$specialpriceto,$metatitle,$metadesc,$metakeyword,$quantity,$status,$category,$relatedproduct,$brand,$type,$modelnumber,$brandcolor,$eanorupc,$eanorupcmeasuringunits,$compatibledevice,$compatiblewith,$material,$color,$width,$height,$depth,$salespackage,$keyfeatures,$videourl,$modelname,$finish,$weight,$domesticwarranty,$warrantysummary,$size,$typename)
+	public function createproduct($name,$sku,$description,$url,$visibility,$price,$wholesaleprice,$firstsaleprice,$secondsaleprice,$specialpricefrom,$specialpriceto,$metatitle,$metadesc,$metakeyword,$quantity,$status,$category,$relatedproduct,$brand,$type,$modelnumber,$brandcolor,$eanorupc,$eanorupcmeasuringunits,$compatibledevice,$compatiblewith,$material,$color,$width,$height,$depth,$salespackage,$keyfeatures,$videourl,$modelname,$finish,$weight,$domesticwarranty,$warrantysummary,$size,$typename,$subcategory)
 	{
 		$data  = array(
 			'name' => $name,
@@ -64,7 +64,10 @@ class Product_model extends CI_Model
 			'domesticwarranty' => $domesticwarranty,
 			'warrantysummary' => $warrantysummary,
 			'size' => $size,
-			'typename' => $typename
+			'typename' => $typename,
+			'subcategory' => $subcategory,
+			'type' => $type,
+			'category' => $category
 		);
 		$query=$this->db->insert( 'product', $data );
 		$id=$this->db->insert_id();
@@ -74,22 +77,22 @@ class Product_model extends CI_Model
             $this->product_model->createproductbrand($value,$productid);
         }
     
-        foreach($type AS $key=>$value)
-        {
-            $this->product_model->createproducttype($value,$productid);
-        }
+//        foreach($type AS $key=>$value)
+//        {
+//            $this->product_model->createproducttype($value,$productid,$color,$size);
+//        }
     
-		if(!empty($category))
-		{
-			foreach($category as $key => $cat)
-			{
-				$data1  = array(
-					'product' => $id,
-					'category' => $cat,
-				);
-				$query=$this->db->insert( 'productcategory', $data1 );
-			}
-		}
+//		if(!empty($category))
+//		{
+//			foreach($category as $key => $cat)
+//			{
+//				$data1  = array(
+//					'product' => $id,
+//					'category' => $cat,
+//				);
+//				$query=$this->db->insert( 'productcategory', $data1 );
+//			}
+//		}
 		if($query)
 		{
 			$this->saveproductlog($id,"Product Created");
@@ -118,11 +121,22 @@ class Product_model extends CI_Model
 		$query=$this->db->insert( 'productbrand', $data );
 		return  1;
 	}
-    public function createproducttype($value,$productid)
+    public function createproducttype($value,$productid,$color,$size)
 	{
 		$data  = array(
 			'type' => $value,
 			'product' => $productid
+		);
+		$query=$this->db->insert( 'producttype', $data );
+        
+//        INVENTORY PRODDUCTS MAPPING
+        
+        
+        $data  = array(
+			'type' => $value,
+			'color' => $color,
+			'size' => $size,
+            'product' => $productid
 		);
 		$query=$this->db->insert( 'producttype', $data );
 		return  1;
@@ -165,7 +179,7 @@ class Product_model extends CI_Model
 		return $query;
 	}
 	
-	public function editproduct( $id,$name,$sku,$description,$url,$visibility,$price,$wholesaleprice,$firstsaleprice,$secondsaleprice,$specialpricefrom,$specialpriceto,$metatitle,$metadesc,$metakeyword,$quantity,$status,$category,$relatedproduct,$brand,$type,$modelnumber,$brandcolor,$eanorupc,$eanorupcmeasuringunits,$compatibledevice,$compatiblewith,$material,$color,$width,$height,$depth,$salespackage,$keyfeatures,$videourl,$modelname,$finish,$weight,$domesticwarranty,$warrantysummary,$size,$typename)
+	public function editproduct( $id,$name,$sku,$description,$url,$visibility,$price,$wholesaleprice,$firstsaleprice,$secondsaleprice,$specialpricefrom,$specialpriceto,$metatitle,$metadesc,$metakeyword,$quantity,$status,$category,$relatedproduct,$brand,$type,$modelnumber,$brandcolor,$eanorupc,$eanorupcmeasuringunits,$compatibledevice,$compatiblewith,$material,$color,$width,$height,$depth,$salespackage,$keyfeatures,$videourl,$modelname,$finish,$weight,$domesticwarranty,$warrantysummary,$size,$typename,$subcategory)
 	{
 		$data = array(
 			'name' => $name,
@@ -204,7 +218,9 @@ class Product_model extends CI_Model
 			'domesticwarranty' => $domesticwarranty,
 			'warrantysummary' => $warrantysummary,
 			'size' => $size,
-			'typename' => $typename
+			'typename' => $typename,
+			'subcategory' => $subcategory,
+			'category' => $category
 		);
 		$this->db->where( 'id', $id );
 		$q=$this->db->update( 'product', $data );
@@ -218,22 +234,22 @@ class Product_model extends CI_Model
             $this->product_model->createproductbrand($value,$id);
         }
     
-        foreach($type AS $key=>$value)
-        {
-            $this->product_model->createproducttype($value,$id);
-        }
-    
-		if(!empty($category))
-		{
-			foreach($category as $key => $cat)
-			{
-				$data1  = array(
-					'product' => $id,
-					'category' => $cat,
-				);
-				$query=$this->db->insert( 'productcategory', $data1 );
-			}
-		}
+//        foreach($type AS $key=>$value)
+//        {
+//            $this->product_model->createproducttype($value,$id);
+//        }
+//    
+//		if(!empty($category))
+//		{
+//			foreach($category as $key => $cat)
+//			{
+//				$data1  = array(
+//					'product' => $id,
+//					'category' => $cat,
+//				);
+//				$query=$this->db->insert( 'productcategory', $data1 );
+//			}
+//		}
 		if($q)
 		{
 			$this->saveproductlog($id,"Product Details Edited");

@@ -62,8 +62,14 @@ class Order_model extends CI_Model
             $query=$this->db->query("INSERT INTO `usercart`(`user`, `product`, `quantity`) VALUES ('$user','$product','$quantity')");
         }
     }
-    function placeorder($user, $firstname, $lastname, $email,$billingcontact,$billingaddress, $billingcity, $billingstate, $billingcountry, $shippingaddress, $shippingcity, $shippingcountry, $shippingstate, $shippingpincode, $billingpincode, $status, $company, $carts, $finalamount, $shippingmethod, $shippingname, $shippingcontact, $customernote)
+    function placeorder($user, $firstname, $lastname, $email,$billingcontact,$billingaddress, $billingcity, $billingstate, $billingcountry, $shippingaddress, $shippingcity, $shippingcountry, $shippingstate, $shippingpincode, $billingpincode, $status, $company, $carts, $finalamount, $shippingmethod, $shippingname, $shippingcontact, $customernote,$design)
 	{
+        if($design!=""){
+        $querydesign=$this->db->query("SELECT `fromuser` FROM `designs` WHERE `id`='$design'")->row();
+            $designer=$querydesign->fromuser;
+             $querydesigner=$this->db->query("SELECT COUNT(*) as `designcount` FROM `designs` WHERE `fromuser`='$designer'")->row();
+             $noodesigns=$querydesigner->designcount;
+        }
         
         $mysession=$this->session->all_userdata();
         

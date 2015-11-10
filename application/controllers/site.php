@@ -27,6 +27,7 @@ class Site extends CI_Controller
 		$this->checkaccess($access);
         $remainingproducts=$this->config_model->getremainingproducts();
         $data['remainingproducts']=$this->config_model->getremainingproducts();
+//        $data['remainingproductscount']=$this->config_model->getremainingproducts();
           $data["base_url"]=site_url("site/viewdashboardjson?id=".$remainingproducts);
         
 		$data[ 'page' ] = 'dashboard';
@@ -652,7 +653,8 @@ class Site extends CI_Controller
 		$this->checkaccess($access);
 		$data[ 'status' ] =$this->product_model->getstatusdropdown();
 		$data['relatedproduct']=$this->product_model->getproductdropdown();
-		$data['category']=$this->product_model->getcategorydropdown();
+		$data['category']=$this->category_model->getcategorydropdown();
+		$data['subcategory']=$this->subcategory_model->getsubcategorydropdown();
 		$data['visibility']=$this->product_model->getvisibility();
         $data['brand']=$this->brand_model->getbranddropdown();
         $data['type']=$this->brand_model->gettypedropdown();
@@ -685,6 +687,7 @@ class Site extends CI_Controller
 			$data['alerterror'] = validation_errors();
 			$data[ 'status' ] =$this->product_model->getstatusdropdown();
 			$data['relatedproduct']=$this->product_model->getproductdropdown();
+            $data['subcategory']=$this->subcategory_model->getsubcategorydropdown();
 			$data['category']=$this->product_model->getcategorydropdown();
 			$data['visibility']=$this->product_model->getvisibility();
 			$data[ 'page' ] = 'createproduct';
@@ -735,12 +738,13 @@ class Site extends CI_Controller
 			$warrantysummary=$this->input->post('warrantysummary');
 			$size=$this->input->post('size');
 			$typename=$this->input->post('typename');
+			$subcategory=$this->input->post('subcategory');
             
 			if($specialpricefrom != "")
 				$specialpricefrom = date("Y-m-d",strtotime($specialpricefrom));
 			if($specialpriceto != "")
 				$specialpriceto = date("Y-m-d",strtotime($specialpriceto));
-			if($this->product_model->createproduct($name,$sku,$description,$url,$visibility,$price,$wholesaleprice,$firstsaleprice,$secondsaleprice,$specialpricefrom,$specialpriceto,$metatitle,$metadesc,$metakeyword,$quantity,$status,$category,$relatedproduct,$brand,$type,$modelnumber,$brandcolor,$eanorupc,$eanorupcmeasuringunits,$compatibledevice,$compatiblewith,$material,$color,$width,$height,$depth,$salespackage,$keyfeatures,$videourl,$modelname,$finish,$weight,$domesticwarranty,$warrantysummary,$size,$typename)==0)
+			if($this->product_model->createproduct($name,$sku,$description,$url,$visibility,$price,$wholesaleprice,$firstsaleprice,$secondsaleprice,$specialpricefrom,$specialpriceto,$metatitle,$metadesc,$metakeyword,$quantity,$status,$category,$relatedproduct,$brand,$type,$modelnumber,$brandcolor,$eanorupc,$eanorupcmeasuringunits,$compatibledevice,$compatiblewith,$material,$color,$width,$height,$depth,$salespackage,$keyfeatures,$videourl,$modelname,$finish,$weight,$domesticwarranty,$warrantysummary,$size,$typename,$subcategory)==0)
 			$data['alerterror']="New product could not be created.";
 			else
 			$data['alertsuccess']="product  created Successfully.";
@@ -837,6 +841,7 @@ class Site extends CI_Controller
 		$data['before']=$this->product_model->beforeeditproduct($this->input->get('id'));
 		$data[ 'status' ] =$this->product_model->getstatusdropdown();
 		$data['relatedproduct']=$this->product_model->getproductdropdown();
+        $data['subcategory']=$this->subcategory_model->getsubcategorydropdown();
 		$data['category']=$this->product_model->getcategorydropdown();
 		$data['visibility']=$this->product_model->getvisibility();
         $data['brand']=$this->brand_model->getbranddropdown();
@@ -875,6 +880,7 @@ class Site extends CI_Controller
 			$data['category']=$this->product_model->getcategorydropdown();
 			$data['visibility']=$this->product_model->getvisibility();
         $data['brand']=$this->brand_model->getbranddropdown();
+            $data['subcategory']=$this->subcategory_model->getsubcategorydropdown();
         $data['selectedbrand']=$this->brand_model->getbrandbyproduct($this->input->get_post('id'));
 			$data['before']=$this->product_model->beforeeditproduct($this->input->post('id'));
 			$data['page']='editproduct';
@@ -933,8 +939,9 @@ class Site extends CI_Controller
 			$warrantysummary=$this->input->post('warrantysummary');
 			$size=$this->input->post('size');
             $typename=$this->input->post('typename');
+            $subcategory=$this->input->post('subcategory');
             
-			if($this->product_model->editproduct($id,$name,$sku,$description,$url,$visibility,$price,$wholesaleprice,$firstsaleprice,$secondsaleprice,$specialpricefrom,$specialpriceto,$metatitle,$metadesc,$metakeyword,$quantity,$status,$category,$relatedproduct,$brand,$type,$modelnumber,$brandcolor,$eanorupc,$eanorupcmeasuringunits,$compatibledevice,$compatiblewith,$material,$color,$width,$height,$depth,$salespackage,$keyfeatures,$videourl,$modelname,$finish,$weight,$domesticwarranty,$warrantysummary,$size,$typename)==0)
+			if($this->product_model->editproduct($id,$name,$sku,$description,$url,$visibility,$price,$wholesaleprice,$firstsaleprice,$secondsaleprice,$specialpricefrom,$specialpriceto,$metatitle,$metadesc,$metakeyword,$quantity,$status,$category,$relatedproduct,$brand,$type,$modelnumber,$brandcolor,$eanorupc,$eanorupcmeasuringunits,$compatibledevice,$compatiblewith,$material,$color,$width,$height,$depth,$salespackage,$keyfeatures,$videourl,$modelname,$finish,$weight,$domesticwarranty,$warrantysummary,$size,$typename,$subcategory)==0)
 			$data['alerterror']="product Editing was unsuccesful";
 			else
 			$data['alertsuccess']="product edited Successfully.";
@@ -4783,12 +4790,16 @@ class Site extends CI_Controller
         $access=array("1");
         $this->checkaccess($access);
         $data["page"]="viewdesigns";
-        $data["base_url"]=site_url("site/viewdesignsjson");
+        $data["page2"]="block/designblock";
+        $id=$this->input->get('id');
+        $data['before1']=$this->input->get('id');
+        $data["base_url"]=site_url("site/viewdesignsjson?id=".$id);
         $data["title"]="View designs";
-        $this->load->view("template",$data);
+        $this->load->view("templatewith2",$data);
     }
     function viewdesignsjson()
     {
+        $id=$this->input->get('id');
         $elements=array();
         $elements[0]=new stdClass();
         $elements[0]->field="`designs`.`id`";
@@ -4797,7 +4808,7 @@ class Site extends CI_Controller
         $elements[0]->alias="id";
         
         $elements[1]=new stdClass();
-        $elements[1]->field="`user`.`name`";
+        $elements[1]->field="`designers`.`name`";
         $elements[1]->sort="1";
         $elements[1]->header="fromuser";
         $elements[1]->alias="fromuser";
@@ -4820,6 +4831,12 @@ class Site extends CI_Controller
         $elements[4]->header="timestamp";
         $elements[4]->alias="timestamp";
         
+        $elements[5]=new stdClass();
+        $elements[5]->field="`designs`.`fromuser`";
+        $elements[5]->sort="1";
+        $elements[5]->header="designerid";
+        $elements[5]->alias="designerid";
+        
         $search=$this->input->get_post("search");
         $pageno=$this->input->get_post("pageno");
         $orderby=$this->input->get_post("orderby");
@@ -4834,7 +4851,7 @@ class Site extends CI_Controller
             $orderby="id";
             $orderorder="ASC";
         }
-        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `designs` LEFT OUTER JOIN `user` ON `user`.`id`=`designs`.`fromuser`");
+        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `designs` LEFT OUTER JOIN `designers` ON `designers`.`id`=`designs`.`fromuser`","WHERE `designers`.`id`=$id");
         $this->load->view("json",$data);
     }
 
@@ -4843,7 +4860,7 @@ class Site extends CI_Controller
 		$access = array("1");
 		$this->checkaccess($access);
         $data[ 'status' ] =$this->designs_model->getstatusdropdown();
-        $data[ 'fromuser' ] =$this->user_model->getUserDropDown();
+        $data[ 'fromuser' ] =$this->designers_model->getdesignerdropdown();
 		$data[ 'page' ] = 'createdesigns';
 		$data[ 'title' ] = 'Create designs';
 		$this->load->view( 'template', $data );	
@@ -4858,7 +4875,7 @@ class Site extends CI_Controller
 		{
 			$data['alerterror'] = validation_errors();
             $data[ 'status' ] =$this->designs_model->getstatusdropdown();
-            $data[ 'fromuser' ] =$this->user_model->getUserDropDown();
+            $data[ 'fromuser' ] =$this->designers_model->getdesignerdropdown();
 			$data[ 'page' ] = 'createdesigns';
 			$data[ 'title' ] = 'Create designs';
 			$this->load->view('template',$data);
@@ -4883,31 +4900,23 @@ class Site extends CI_Controller
 			$data['alerterror']="New designs could not be created.";
 			else
 			$data['alertsuccess']="designs  created Successfully.";
-			$data['redirect']="site/viewdesigns";
+			$data['redirect']="site/viewdesigns?id=".$fromuser;
 			//$data['other']="template=$template";
-			$this->load->view("redirect",$data);
+			$this->load->view("redirect2",$data);
 		}
 	}
-//	function viewdesigns()
-//	{
-//		$access = array("1");
-//		$this->checkaccess($access);
-//		$data['table']=$this->designs_model->viewdesigns();
-//		$data['page']='viewdesigns';
-//		$data['title']='View designs';
-//		$this->load->view('template',$data);
-//	}
 	function editdesigns()
 	{
 		$access = array("1");
 		$this->checkaccess($access);
 		$data['before']=$this->designs_model->beforeeditdesigns($this->input->get('id'));
 		$data[ 'status' ] =$this->designs_model->getstatusdropdown();
-        $data[ 'fromuser' ] =$this->user_model->getUserDropDown();
-//		$data['page2']='block/designsblock';
+        $data[ 'fromuser' ] =$this->designers_model->getdesignerdropdown();
+        $data[ 'before1' ] =$this->input->get('id');
+		$data['page2']='block/designblock';
 		$data['page']='editdesigns';
 		$data['title']='Edit designs';
-		$this->load->view('template',$data);
+		$this->load->view('templatewith2',$data);
 	}
 	function editdesignssubmit()
 	{
@@ -4919,7 +4928,7 @@ class Site extends CI_Controller
 		{
 			$data['alerterror'] = validation_errors();
             $data[ 'status' ] =$this->designs_model->getstatusdropdown();
-            $data[ 'fromuser' ] =$this->user_model->getUserDropDown();
+            $data[ 'fromuser' ] =$this->designers_model->getdesignerdropdown();
 			$data['before']=$this->designs_model->beforeeditdesigns($this->input->post('id'));
 			$data['page']='editdesigns';
 			$data['title']='Edit designs';
@@ -4954,8 +4963,8 @@ class Site extends CI_Controller
 			$data['alerterror']="designs Editing was unsuccesful";
 			else
 			$data['alertsuccess']="designs edited Successfully.";
-			$data['redirect']="site/viewdesigns";
-			$this->load->view("redirect",$data);
+			$data['redirect']="site/viewdesigns?id=".$fromuser;
+			$this->load->view("redirect2",$data);
 		}
 	}
 	function deletedesigns()
@@ -4963,9 +4972,10 @@ class Site extends CI_Controller
 		$access = array("1");
 		$this->checkaccess($access);
 		$this->designs_model->deletedesigns($this->input->get('id'));
+        $designerid=$this->input->get('designerid');
 		$data['alertsuccess']="designs Deleted Successfully";
-        $data['redirect']="site/viewdesigns";
-        $this->load->view("redirect",$data);
+        $data['redirect']="site/viewdesigns?id=".$designerid;
+        $this->load->view("redirect2",$data);
 	}
     
     
@@ -5038,6 +5048,277 @@ class Site extends CI_Controller
 		
 	}
     
+    // DESIGNERS
+    
+    public function createsubcategory()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data[ 'status' ] =$this->user_model->getstatusdropdown();
+		$data['category']=$this->product_model->getcategorydropdown();
+		$data[ 'page' ] = 'createsubcategory';
+		$data[ 'title' ] = 'Create subcategory';
+		$this->load->view( 'template', $data );	
+	}
+	function createsubcategorysubmit()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$this->form_validation->set_rules('name','Name','trim|required');
+		$this->form_validation->set_rules('parent','parent','trim|');
+		$this->form_validation->set_rules('status','status','trim|');
+		$this->form_validation->set_rules('order','order','trim|');
+		if($this->form_validation->run() == FALSE)	
+		{
+			$data['alerterror'] = validation_errors();
+			$data[ 'status' ] =$this->user_model->getstatusdropdown();
+			$data['category']=$this->product_model->getcategorydropdown();
+			$data[ 'page' ] = 'createsubcategory';
+			$data[ 'title' ] = 'Create subcategory';
+			$this->load->view('template',$data);
+		}
+		else
+		{
+			$name=$this->input->post('name');
+			$category=$this->input->post('category');
+			$status=$this->input->post('status');
+			$order=$this->input->post('order');
+			$config['upload_path'] = './uploads/';
+			$config['allowed_types'] = 'gif|jpg|png';
+			$this->load->library('upload', $config);
+			$filename="image1";
+			$image1="";
+			if (  $this->upload->do_upload($filename))
+			{
+				$uploaddata = $this->upload->data();
+				$image1=$uploaddata['file_name'];
+			}
+			$filename="image2";
+			$image2="";
+			if (  $this->upload->do_upload($filename))
+			{
+				$uploaddata = $this->upload->data();
+				$image2=$uploaddata['file_name'];
+			}
+			if($this->subcategory_model->createsubcategory($name,$category,$status,$order,$image1,$image2)==0)
+			$data['alerterror']="New subcategory could not be created.";
+			else
+			$data['alertsuccess']="subcategory  created Successfully.";
+			$data['table']=$this->subcategory_model->viewsubcategory();
+			$data['redirect']="site/viewsubcategory";
+			//$data['other']="template=$template";
+			$this->load->view("redirect",$data);
+		}
+	}
+	function viewsubcategory()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data['category']=$this->product_model->getcategorydropdown();
+		$data['table']=$this->subcategory_model->viewsubcategory();
+		$data['page']='viewsubcategory';
+		$data['title']='View subcategory';
+		$this->load->view('template',$data);
+	}
+	function editsubcategory()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data['before']=$this->subcategory_model->beforeeditsubcategory($this->input->get('id'));
+		$data['category']=$this->category_model->getcategorydropdown();
+		$data[ 'status' ] =$this->user_model->getstatusdropdown();
+		$data['page']='editsubcategory';
+		$data['title']='Edit subcategory';
+		$this->load->view('template',$data);
+	}
+	function editsubcategorysubmit()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$this->form_validation->set_rules('name','Name','trim|required');
+		$this->form_validation->set_rules('category','category','trim|');
+		$this->form_validation->set_rules('status','status','trim|');
+		$this->form_validation->set_rules('order','order','trim|');
+		if($this->form_validation->run() == FALSE)	
+		{
+			$data['alerterror'] = validation_errors();
+			$data[ 'status' ] =$this->user_model->getstatusdropdown();
+			$data['category']=$this->product_model->getcategorydropdown();
+			$data['before']=$this->subcategory_model->beforeeditsubcategory($this->input->post('id'));
+			$data['page']='editsubcategory';
+			$data['title']='Edit subcategory';
+			$this->load->view('template',$data);
+		}
+		else
+		{
+			$id=$this->input->post('id');
+			$name=$this->input->post('name');
+			$category=$this->input->post('category');
+			$status=$this->input->post('status');
+			$order=$this->input->post('order');
+			$config['upload_path'] = './uploads/';
+			$config['allowed_types'] = 'gif|jpg|png';
+			$this->load->library('upload', $config);
+			$filename="image1";
+			$image1="";
+			if (  $this->upload->do_upload($filename))
+			{
+				$uploaddata = $this->upload->data();
+				$image1=$uploaddata['file_name'];
+			}
+			$filename="image2";
+			$image2="";
+			if (  $this->upload->do_upload($filename))
+			{
+				$uploaddata = $this->upload->data();
+				$image2=$uploaddata['file_name'];
+			}
+			if($this->subcategory_model->editsubcategory($id,$name,$category,$status,$order,$image1,$image2)==0)
+			$data['alerterror']="subcategory Editing was unsuccesful";
+			else
+			$data['alertsuccess']="subcategory edited Successfully.";
+			$data['table']=$this->subcategory_model->viewsubcategory();
+			$data['redirect']="site/viewsubcategory";
+			//$data['other']="template=$template";
+			$this->load->view("redirect",$data);
+			/*$data['page']='viewusers';
+			$data['title']='View Users';
+			$this->load->view('template',$data);*/
+		}
+	}
+	function deletesubcategory()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$this->subcategory_model->deletesubcategory($this->input->get('id'));
+		$data['table']=$this->subcategory_model->viewsubcategory();
+		$data['alertsuccess']="subcategory Deleted Successfully";
+		$data['page']='viewsubcategory';
+		$data['title']='View subcategory';
+		$this->load->view('template',$data);
+	}
+    
+    
+    // DESIGNERS
+    
+    
+     public function viewdesigners()
+    {
+        $access=array("1");
+        $this->checkaccess($access);
+        $data["page"]="viewdesigners";
+        $data["base_url"]=site_url("site/viewdesignersjson");
+        $data["title"]="View designers";
+        $this->load->view("template",$data);
+    }
+    function viewdesignersjson()
+    {
+        $elements=array();
+        $elements[0]=new stdClass();
+        $elements[0]->field="`designers`.`id`";
+        $elements[0]->sort="1";
+        $elements[0]->header="ID";
+        $elements[0]->alias="id";
+        
+        $elements[1]=new stdClass();
+        $elements[1]->field="`designers`.`name`";
+        $elements[1]->sort="1";
+        $elements[1]->header="name";
+        $elements[1]->alias="name";
+        
+        $elements[2]=new stdClass();
+        $elements[2]->field="`designers`.`email`";
+        $elements[2]->sort="1";
+        $elements[2]->header="email";
+        $elements[2]->alias="email";
+        
+        $elements[3]=new stdClass();
+        $elements[3]->field="`designers`.`noofdesigns`";
+        $elements[3]->sort="1";
+        $elements[3]->header="noofdesigns";
+        $elements[3]->alias="noofdesigns";
+        
+        $search=$this->input->get_post("search");
+        $pageno=$this->input->get_post("pageno");
+        $orderby=$this->input->get_post("orderby");
+        $orderorder=$this->input->get_post("orderorder");
+        $maxrow=$this->input->get_post("maxrow");
+        if($maxrow=="")
+        {
+            $maxrow=20;
+        }
+        if($orderby=="")
+        {
+            $orderby="id";
+            $orderorder="ASC";
+        }
+        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `designers`");
+        $this->load->view("json",$data);
+    }
+
+	public function createdesigners()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data[ 'page' ] = 'createdesigners';
+		$data[ 'title' ] = 'Create designers';
+		$this->load->view( 'template', $data );	
+	}
+	function createdesignerssubmit()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+			$name=$this->input->post('name');
+			$email=$this->input->post('email');
+			$location=$this->input->post('location');
+			if($this->designers_model->createdesigners($name,$email,$location)==0)
+			$data['alerterror']="New designers could not be created.";
+			else
+			$data['alertsuccess']="designers  created Successfully.";
+			$data['redirect']="site/viewdesigners";
+			$this->load->view("redirect",$data);
+		}
+	
+	function editdesigners()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data['before']=$this->designers_model->beforeeditdesigners($this->input->get('id'));
+            $data[ 'before1' ] =$this->input->get('id');
+		$data['page2']='block/designblock';
+//		$data['page2']='block/designersblock';
+		$data['page']='editdesigners';
+		$data['title']='Edit designers';
+		$this->load->view('templatewith2',$data);
+	}
+	function editdesignerssubmit()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+			$id=$this->input->post('id');
+			$name=$this->input->post('name');
+			$email=$this->input->post('email');
+			$location=$this->input->post('location');
+            
+			if($this->designers_model->editdesigners($id,$name,$email,$location)==0)
+			$data['alerterror']="designers Editing was unsuccesful";
+			else
+			$data['alertsuccess']="designers edited Successfully.";
+			$data['redirect']="site/viewdesigners";
+			$this->load->view("redirect",$data);
+		
+	}
+	function deletedesigners()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$this->designers_model->deletedesigners($this->input->get('id'));
+		$data['alertsuccess']="designers Deleted Successfully";
+        $data['redirect']="site/viewdesigners";
+        $this->load->view("redirect",$data);
+	}
+    
     
 }
+
 ?>
