@@ -1386,7 +1386,7 @@ class Site extends CI_Controller
 	{
 		$access = array("1");
 		$this->checkaccess($access);
-		$this->form_validation->set_rules('name','Name','trim|required');
+//		$this->form_validation->set_rules('name','Name','trim|required');
 		$this->form_validation->set_rules('link','link','trim|');
 		$this->form_validation->set_rules('target','target','trim|');
 		$this->form_validation->set_rules('status','status','trim|');
@@ -1409,6 +1409,10 @@ class Site extends CI_Controller
 			$todate=$this->input->post('todate');
 			if($todate != "")
 				$todate = date("Y-m-d",strtotime($todate));
+			$template=$this->input->post('template');
+			$class=$this->input->post('class');
+			$text=$this->input->post('text');
+			$centrealign=$this->input->post('centrealign');
 			$status=$this->input->post('status');
 			$config['upload_path'] = './uploads/';
 			$config['allowed_types'] = 'gif|jpg|png';
@@ -1421,7 +1425,7 @@ class Site extends CI_Controller
 				$image=$uploaddata['file_name'];
 			}
 			
-			if($this->banner_model->createbanner1($name,$link,$target,$status,$fromdate,$todate,$image)==0)
+			if($this->banner_model->createbanner1($name,$link,$target,$status,$fromdate,$todate,$image,$template,$class,$text,$centrealign)==0)
 			$data['alerterror']="New banner1 could not be created.";
 			else
 			$data['alertsuccess']="banner1  created Successfully.";
@@ -1431,15 +1435,57 @@ class Site extends CI_Controller
 			$this->load->view("redirect",$data);
 		}
 	}
-	function viewbanner1()
-	{
-		$access = array("1");
-		$this->checkaccess($access);
-		$data['table']=$this->banner_model->viewbanner1();
+//	function viewbanner1()
+//	{
+//		$access = array("1");
+//		$this->checkaccess($access);
+//		$data['table']=$this->banner_model->viewbanner1();
+//		$data['page']='viewbanner1';
+//		$data['title']='View banner1';
+//		$this->load->view('template',$data);
+//	}
+    public function viewbanner1()
+    {
+        $access=array("1");
+        $this->checkaccess($access);
 		$data['page']='viewbanner1';
-		$data['title']='View banner1';
-		$this->load->view('template',$data);
-	}
+        $data["base_url"]=site_url("site/viewbanner1json");
+        $data["title"]="View Home Slides";
+        $this->load->view("template",$data);
+    }
+    function viewbanner1json()
+    {
+        $elements=array();
+        $elements[0]=new stdClass();
+        $elements[0]->field="`banner1`.`id`";
+        $elements[0]->sort="1";
+        $elements[0]->header="ID";
+        $elements[0]->alias="id";
+        
+        $elements[1]=new stdClass();
+        $elements[1]->field="`banner1`.`image`";
+        $elements[1]->sort="1";
+        $elements[1]->header="image";
+        $elements[1]->alias="image";
+        
+        
+        $search=$this->input->get_post("search");
+        $pageno=$this->input->get_post("pageno");
+        $orderby=$this->input->get_post("orderby");
+        $orderorder=$this->input->get_post("orderorder");
+        $maxrow=$this->input->get_post("maxrow");
+        if($maxrow=="")
+        {
+            $maxrow=20;
+        }
+        if($orderby=="")
+        {
+            $orderby="id";
+            $orderorder="ASC";
+        }
+        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `banner1`");
+        $this->load->view("json",$data);
+    }
 	function editbanner1()
 	{
 		$access = array("1");
@@ -1454,7 +1500,7 @@ class Site extends CI_Controller
 	{
 		$access = array("1");
 		$this->checkaccess($access);
-		$this->form_validation->set_rules('name','Name','trim|required');
+//		$this->form_validation->set_rules('name','Name','trim|required');
 		$this->form_validation->set_rules('link','link','trim|');
 		$this->form_validation->set_rules('target','target','trim|');
 		$this->form_validation->set_rules('status','status','trim|');
@@ -1480,6 +1526,10 @@ class Site extends CI_Controller
 			if($todate != "")
 				$todate = date("Y-m-d",strtotime($todate));
 			$status=$this->input->post('status');
+            $template=$this->input->post('template');
+			$class=$this->input->post('class');
+			$text=$this->input->post('text');
+			$centrealign=$this->input->post('centrealign');
 			$config['upload_path'] = './uploads/';
 			$config['allowed_types'] = 'gif|jpg|png';
 			$this->load->library('upload', $config);
@@ -1490,7 +1540,7 @@ class Site extends CI_Controller
 				$uploaddata = $this->upload->data();
 				$image=$uploaddata['file_name'];
 			}
-			if($this->banner_model->editbanner1($id,$name,$link,$target,$status,$fromdate,$todate,$image)==0)
+			if($this->banner_model->editbanner1($id,$name,$link,$target,$status,$fromdate,$todate,$image,$template,$class,$text,$centrealign)==0)
 			$data['alerterror']="banner1 Editing was unsuccesful";
 			else
 			$data['alertsuccess']="banner1 edited Successfully.";

@@ -1898,6 +1898,10 @@ echo $filepath;
      $data['message']=$this->restapi_model->getallcategory();
         $this->load->view("json", $data);
     }
+    public function gethomecontent(){
+    $data['message']=$this->restapi_model->gethomecontent();
+        $this->load->view("json", $data);
+    }
     
 }
 ?>
