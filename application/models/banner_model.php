@@ -4,7 +4,7 @@ if ( !defined( 'BASEPATH' ) )
 class Banner_model extends CI_Model
 {
 	//banner1
-	public function createbanner1($name,$link,$target,$status,$fromdate,$todate,$image)
+	public function createbanner1($name,$link,$target,$status,$fromdate,$todate,$image,$template,$class,$text,$centrealign)
 	{
 		$data  = array(
 			'name' => $name,
@@ -14,6 +14,10 @@ class Banner_model extends CI_Model
 			'image' => $image,
 			'fromdate' => $fromdate,
 			'todate' => $todate,
+			'template' => $template,
+			'class' => $class,
+			'text' => $text,
+			'centrealign' => $centrealign
 		);
 		$query=$this->db->insert( 'banner1', $data );
 		return  1;
@@ -31,7 +35,7 @@ class Banner_model extends CI_Model
 		return $query;
 	}
 	
-	public function editbanner1( $id,$name,$link,$target,$status,$fromdate,$todate,$image)
+	public function editbanner1( $id,$name,$link,$target,$status,$fromdate,$todate,$image,$template,$class,$text,$centrealign)
 	{
 		$data = array(
 			'name' => $name,
@@ -40,6 +44,10 @@ class Banner_model extends CI_Model
 			'status' => $status,
 			'fromdate' => $fromdate,
 			'todate' => $todate,
+            'template' => $template,
+			'class' => $class,
+			'text' => $text,
+			'centrealign' => $centrealign
 		);
 		if($image != "")
 			$data['image']=$image;

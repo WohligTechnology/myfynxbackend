@@ -2,11 +2,11 @@
 	<div class="col-lg-12">
 	    <section class="panel">
 		    <header class="panel-heading">
-				 Banner1 Details
+				 Home Slides Details
 			</header>
 			<div class="panel-body">
 				<form class="form-horizontal row-fluid" method="post" action="<?php echo site_url('site/createbannersubmit1');?>" enctype= "multipart/form-data">
-					<div class="form-group">
+					<div class="form-group" style="display:none">
 						<label class="col-sm-2 control-label">Name</label>
 						<div class="col-sm-4">
 						  <input type="text" id="normal-field" class="form-control" name="name" value="<?php echo set_value('name');?>">
@@ -18,7 +18,7 @@
 						  <input type="text" id="normal-field" class="form-control" name="link" value="<?php echo set_value('link');?>">
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group" style="display:none">
 						<label class="col-sm-2 control-label">Target</label>
 						<div class="col-sm-4">
 						  <input type="text" id="normal-field" class="form-control" name="target" value="<?php echo set_value('target');?>">
@@ -33,13 +33,13 @@
 						?>
 					  </div>
 					</div>
-					<div class="form-group">
+					<div class="form-group" style="display:none">
 						<label class="col-sm-2 control-label">From Date</label>
 						<div class="col-sm-4">
 						  <input type="date" id="normal-field" class="form-control" name="fromdate" value="<?php echo set_value('fromdate');?>">
 						</div>
 					</div>	
-					<div class="form-group">
+					<div class="form-group" style="display:none">
 						<label class="col-sm-2 control-label">To Date</label>
 						<div class="col-sm-4">
 						  <input type="date" id="normal-field" class="form-control" name="todate" value="<?php echo set_value('todate');?>">
@@ -51,6 +51,30 @@
 						  <input type="file" id="normal-field" class="form-control" name="image" value="<?php echo set_value('image');?>">
 						</div>
 					</div>	
+					   <div class=" form-group">
+                            <label class="col-sm-2 control-label" for="normal-field">template</label>
+                            <div class="col-sm-8">
+                                <textarea name="template" id="" cols="20" rows="10" class="form-control tinymce"><?php echo set_value( 'template');?></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+						<label class="col-sm-2 control-label">Class</label>
+						<div class="col-sm-4">
+						  <input type="text" id="normal-field" class="form-control" name="class" value="<?php echo set_value('class');?>">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">Center align</label>
+						<div class="col-sm-4">
+						  <input type="text" id="normal-field" class="form-control" name="centrealign" value="<?php echo set_value('centrealign');?>">
+						</div>
+					</div>
+					 <div class=" form-group">
+                            <label class="col-sm-2 control-label" for="normal-field">Text</label>
+                            <div class="col-sm-8">
+                                <textarea name="text" id="" cols="20" rows="10"><?php echo set_value( 'text');?></textarea>
+                            </div>
+                        </div>
 					
 					<div class="form-group">
 						<label class="col-sm-2 control-label">&nbsp;</label>

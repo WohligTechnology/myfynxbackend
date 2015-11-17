@@ -2,7 +2,7 @@
 	<div class="col-lg-12">
 	    <section class="panel">
 		    <header class="panel-heading">
-				 Banner Details
+				 Home Slides Details
 			</header>
 			<div class="panel-body">
 				<form class="form-horizontal row-fluid" method="post" action="<?php echo site_url('site/editbannersubmit1');?>" enctype= "multipart/form-data">
@@ -12,7 +12,7 @@
 						  <input type="text" id="normal-field" class="row-fluid" name="id" value="<?php echo $before->id;?>">
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group" style="display:none">
 						<label class="col-sm-2 control-label">Name</label>
 						<div class="col-sm-4">
 						  <input type="text" id="normal-field" class="form-control" name="name" value="<?php echo set_value('name',$before->name);?>">
@@ -24,8 +24,8 @@
 						  <input type="text" id="normal-field" class="form-control" name="link" value="<?php echo set_value('link',$before->link);?>">
 						</div>
 					</div>
-					<div class="form-group">
-						<label class="col-sm-2 control-label">Target</label>
+					<div class="form-group" style="display:none">
+						<label class="col-sm-2 control-label" >Target</label>
 						<div class="col-sm-4">
 						  <input type="text" id="normal-field" class="form-control" name="target" value="<?php echo set_value('target',$before->target);?>">
 						</div>
@@ -39,13 +39,13 @@
 						?>
 					  </div>
 					</div>
-					<div class="form-group">
+					<div class="form-group" style="display:none">
 						<label class="col-sm-2 control-label">From Date</label>
 						<div class="col-sm-4">
 						  <input type="date" id="normal-field" class="form-control" name="fromdate" value="<?php echo set_value('fromdate',$before->fromdate);?>">
 						</div>
 					</div>	
-					<div class="form-group">
+					<div class="form-group" style="display:none">
 						<label class="col-sm-2 control-label">To Date</label>
 						<div class="col-sm-4">
 						  <input type="date" id="normal-field" class="form-control" name="todate" value="<?php echo set_value('todate',$before->todate);?>">
@@ -63,6 +63,30 @@
 						  ?>
 						</div>
 					</div>	
+					 <div class=" form-group">
+                            <label class="col-sm-2 control-label" for="normal-field">Template</label>
+                            <div class="col-sm-8">
+                                <textarea name="template" id="" cols="20" rows="10" class="form-control tinymce"><?php echo set_value( 'template',$before->template);?></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+						<label class="col-sm-2 control-label">Class</label>
+						<div class="col-sm-4">
+						  <input type="text" id="normal-field" class="form-control" name="class" value="<?php echo set_value('class',$before->class);?>">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">Center align</label>
+						<div class="col-sm-4">
+						  <input type="text" id="normal-field" centrealign="form-control" name="centrealign" value="<?php echo set_value('centrealign',$before->centrealign);?>">
+						</div>
+					</div>
+					 <div class=" form-group">
+                            <label class="col-sm-2 control-label" for="normal-field">Text</label>
+                            <div class="col-sm-8">
+                                <textarea name="text" id="" cols="20" rows="10"><?php echo set_value( 'text',$before->text);?></textarea>
+                            </div>
+                        </div>
 						
 					
 					<div class="form-group">
