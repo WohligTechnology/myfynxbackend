@@ -5368,6 +5368,128 @@ class Site extends CI_Controller
         $this->load->view("redirect",$data);
 	}
     
+    // HOME CATEGORY PRODUCTS
+    
+    
+    public function createhomecategoryproduct()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+         $data['subcategory']=$this->subcategory_model->getsubcategorydropdown();
+		$data['product']=$this->product_model->getproductdropdown();
+		$data[ 'page' ] = 'createhomecategoryproduct';
+		$data[ 'title' ] = 'Create New Arrival';
+		$this->load->view( 'template', $data );	
+	}
+	function createhomecategoryproductsubmit()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+			$product=$this->input->post('product');
+			$subcategory=$this->input->post('subcategory');
+			$order=$this->input->post('order');
+			if($this->homecategoryproduct_model->create($product,$subcategory,$order)==0)
+			$data['alerterror']="New homecategoryproduct could not be created.";
+			else
+			$data['alertsuccess']="homecategoryproduct created Successfully.";
+			
+			$data['table']=$this->homecategoryproduct_model->viewhomecategoryproduct();
+			$data['redirect']="site/viewhomecategoryproduct";
+			//$data['other']="template=$template";
+			$this->load->view("redirect",$data);
+		
+	}
+    public function viewhomecategoryproduct()
+    {
+        $access=array("1");
+        $this->checkaccess($access);
+        $data['table']=$this->homecategoryproduct_model->viewhomecategoryproduct();
+		$data['page']='viewhomecategoryproduct';
+//        $data["base_url"]=site_url("site/viewuserjson");
+        $data["title"]="View homecategoryproducts";
+        $this->load->view("template",$data);
+    }
+//    function viewhomecategoryproductsjson()
+//    {
+//        
+//        $elements=array();
+//        $elements[0]=new stdClass();
+//        $elements[0]->field="`homecategoryproduct`.`id`";
+//        $elements[0]->sort="1";
+//        $elements[0]->header="ID";
+//        $elements[0]->alias="id";
+//        
+//        $elements[1]=new stdClass();
+//        $elements[1]->field="`product`.`name`";
+//        $elements[1]->sort="1";
+//        $elements[1]->header="product";
+//        $elements[1]->alias="product";
+//        
+//        $elements[2]=new stdClass();
+//        $elements[2]->field="`homecategoryproduct`.`type`";
+//        $elements[2]->sort="1";
+//        $elements[2]->header="type";
+//        $elements[2]->alias="type";
+//        
+//        $search=$this->input->get_post("search");
+//        $pageno=$this->input->get_post("pageno");
+//        $orderby=$this->input->get_post("orderby");
+//        $orderorder=$this->input->get_post("orderorder");
+//        $maxrow=$this->input->get_post("maxrow");
+//        if($maxrow=="")
+//        {
+//            $maxrow=20;
+//        }
+//        if($orderby=="")
+//        {
+//            $orderby="id";
+//            $orderorder="ASC";
+//        }
+//        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `homecategoryproduct` LEFT OUTER JOIN `product` ON `product`.`id`=`homecategoryproduct`.`product`");
+//        $this->load->view("json",$data);
+//    }
+
+	function edithomecategoryproduct()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+        $data['subcategory']=$this->subcategory_model->getsubcategorydropdown();
+		$data['product']=$this->product_model->getproductdropdown();
+		$data['before']=$this->homecategoryproduct_model->beforeedit($this->input->get('id'));
+		$data['page']='edithomecategoryproduct';
+		$data['title']='Edit New Arrival';
+		$this->load->view('template',$data);
+	}
+	function edithomecategoryproductsubmit()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+            $id=$this->input->get_post('id');
+            $product=$this->input->post('product');
+			$subcategory=$this->input->post('subcategory');
+			$order=$this->input->post('order');
+       
+			if($this->homecategoryproduct_model->edit($id,$product,$subcategory,$order)==0)
+			$data['alerterror']="homecategoryproduct Editing was unsuccesful";
+			else
+			$data['alertsuccess']="homecategoryproduct edited Successfully.";
+			
+			$data['redirect']="site/viewhomecategoryproduct";
+			$this->load->view("redirect",$data);
+	}
+    
+    function deletehomecategoryproduct()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$this->homecategoryproduct_model->deletehomecategoryproduct($this->input->get('id'));
+		$data['table']=$this->homecategoryproduct_model->viewhomecategoryproduct();
+		$data['alertsuccess']="homecategoryproduct Deleted Successfully";
+		$data['page']='viewhomecategoryproduct';
+		$data['title']='View homecategoryproduct';
+		$this->load->view('template',$data);
+	}
+    
     
 }
 

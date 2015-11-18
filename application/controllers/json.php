@@ -1874,6 +1874,11 @@ echo $filepath;
     $data['message']=$this->restapi_model->gethomecontent();
         $this->load->view("json", $data);
     }
+    public function getSubCategoryProductHome(){
+        $id=$this->input->get('id');
+    $data['message']=$this->restapi_model->getSubCategoryProductHome($id);
+        $this->load->view("json", $data);
+    }
     
 }
 ?>

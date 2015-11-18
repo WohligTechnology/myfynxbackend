@@ -109,7 +109,7 @@ $autoload['language'] = array();
 |
 */
 
-$autoload['model'] = array('user_model','category_model','wishlist_model','cart_model','product_model','order_model','page_model','slider_model','banner_model','celebcorner_model','bloggerscorner_model','navigation_model','currency_model','paymentgateway_model','discountcoupon_model','newsletter_model','pickofweak_model','productimage_model','offer_model','offerproduct_model','brand_model','menu_model','type_model','restapi_model','newarrival_model','subscribe_model','aboutus_model','designs_model','config_model','subcategory_model','designers_model');
+$autoload['model'] = array('user_model','category_model','wishlist_model','cart_model','product_model','order_model','page_model','slider_model','banner_model','celebcorner_model','bloggerscorner_model','navigation_model','currency_model','paymentgateway_model','discountcoupon_model','newsletter_model','pickofweak_model','productimage_model','offer_model','offerproduct_model','brand_model','menu_model','type_model','restapi_model','newarrival_model','subscribe_model','aboutus_model','designs_model','config_model','subcategory_model','designers_model','homecategoryproduct_model');
 
 /* End of file autoload.php */
 /* Location: ./application/config/autoload.php */
