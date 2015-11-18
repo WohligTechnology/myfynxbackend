@@ -19,6 +19,7 @@
 						</div>
 					</div>
 					
+<!--
 				<div class=" form-group">
 				  <label class="col-sm-2 control-label">Brands</label>
 				  <div class="col-sm-4">
@@ -28,6 +29,7 @@
 					?>
 				  </div>
 				</div>
+-->
 <!--
 			    <div class=" form-group">
 				  <label class="col-sm-2 control-label">Types</label>

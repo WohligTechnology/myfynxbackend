@@ -947,7 +947,7 @@ class Site extends CI_Controller
 			$data['alertsuccess']="product edited Successfully.";
 			$data['table']=$this->product_model->viewproduct();
             
-			$data['redirect']="site/editproduct?id=".$id;
+			$data['redirect']="site/viewproduct";
 			//$data['other']="template=$template";
 			$this->load->view("redirect",$data);
 			/*$data['page']='viewusers';

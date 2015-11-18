@@ -1278,55 +1278,28 @@ echo $filepath;
     public function getproductbycategory()
     {
         $userid=$this->session->userdata("id");
-        $parent = $this->input->get_post("parent");
         $category = $this->input->get_post("category");
-        if($parent==0)
-        {
-        $parent="";
-        }
-        if($category==0)
-        {
-        $category="";
-        }
-        $getproductids=array();
-        if ($parent==""){
-        $getproductids=$this->db->query("SELECT `product` FROM `productcategory` WHERE `category`= '$category'")->result();
-        }
-        else{
-        $getcategoryids=$this->db->query("SELECT `id` FROM `category` WHERE `parent`= '$parent'")->result();
-            $ids="(";
-            foreach($getcategoryids as $key=>$value){
-//            $catid=$row->id;
-                if($key==0)
-                {
-                    $ids.=$value->id;
-                }
-                else
-                {
-                    $ids.=",".$value->id;
-                }
-            }
-            $ids.=")";
-             $getproductids=$this->db->query("SELECT `product` FROM `productcategory` WHERE `category` IN $ids")->result(); 
-            
-        }
-         $productids="(";
-            foreach($getproductids as $key=>$value){
-//            $catid=$row->id;
-                if($key==0)
-                {
-                    $productids.=$value->product;
-                }
-                else
-                {
-                    $productids.=",".$value->product;
-                }
-            }
-            $productids.=")";
-        if($productids=="()")
-        {
-           $productids="(0)";
-        }
+      
+//        $getproductids=array();
+//        $getproductids=$this->db->query("SELECT `product` FROM `productcategory` WHERE `category`= '$category'")->result();
+//      
+//         $productids="(";
+//            foreach($getproductids as $key=>$value){
+////            $catid=$row->id;
+//                if($key==0)
+//                {
+//                    $productids.=$value->product;
+//                }
+//                else
+//                {
+//                    $productids.=",".$value->product;
+//                }
+//            }
+//            $productids.=")";
+//        if($productids=="()")
+//        {
+//           $productids="(0)";
+//        }
 //        else
 //        {
                 $elements = array();
@@ -1408,10 +1381,9 @@ echo $filepath;
                 if ($maxrow == "") {
                     $maxrow = 20;
                 }
-                $data["message"] = $this->chintantable->query($pageno, $maxrow, $orderby, $orderorder, $search, $elements, "FROM `product` LEFT OUTER JOIN `userwishlist` ON `userwishlist`.`product`=`product`.`id` AND `userwishlist`.`user`='$userid' LEFT OUTER JOIN `productimage` as `image2` ON `image2`.`product`=`product`.`id` AND `image2`.`order`=0 LEFT OUTER JOIN `productimage` as `image1` ON `image1`.`product`=`product`.`id` AND `image1`.`order`=1", "WHERE `product`.`visibility`=1 AND `product`.`status`=1 AND  `product`.`id` IN $productids", ' GROUP BY `product`.`id` ');
+                $data["message"] = $this->chintantable->query($pageno, $maxrow, $orderby, $orderorder, $search, $elements, "FROM `product` LEFT OUTER JOIN `userwishlist` ON `userwishlist`.`product`=`product`.`id` AND `userwishlist`.`user`='$userid' LEFT OUTER JOIN `productimage` as `image2` ON `image2`.`product`=`product`.`id` AND `image2`.`order`=0 LEFT OUTER JOIN `productimage` as `image1` ON `image1`.`product`=`product`.`id` AND `image1`.`order`=1", "WHERE `product`.`visibility`=1 AND `product`.`status`=1 AND  `product`.`category` = $category");
         
         $this->load->view("json", $data);
-//        }
     }
     
     // EXCLUSIVE AND NEW ARRIVALS

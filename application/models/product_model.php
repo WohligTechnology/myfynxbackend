@@ -72,10 +72,10 @@ class Product_model extends CI_Model
 		$query=$this->db->insert( 'product', $data );
 		$id=$this->db->insert_id();
         $productid=$id;
-        foreach($brand AS $key=>$value)
-        {
-            $this->product_model->createproductbrand($value,$productid);
-        }
+//        foreach($brand AS $key=>$value)
+//        {
+//            $this->product_model->createproductbrand($value,$productid);
+//        }
     
 //        foreach($type AS $key=>$value)
 //        {
@@ -229,10 +229,10 @@ class Product_model extends CI_Model
 		$this->db->query("DELETE FROM `productbrand` WHERE `product`='$id'");
 		$this->db->query("DELETE FROM `producttype` WHERE `product`='$id'");
         
-        foreach($brand AS $key=>$value)
-        {
-            $this->product_model->createproductbrand($value,$id);
-        }
+//        foreach($brand AS $key=>$value)
+//        {
+//            $this->product_model->createproductbrand($value,$id);
+//        }
     
 //        foreach($type AS $key=>$value)
 //        {
