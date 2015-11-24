@@ -29,7 +29,11 @@
   <body class="login-body">
 
     <div class="container">
-
+          <div class="col-xs-12" >
+                <div class="logo text-center">
+                    <img src="<?php echo base_url('uploads/logo.png'); ?>" width="100" style="padding-top: 12px;">
+                </div>
+            </div>
       <form class="form-signin" method="post" action="<?php echo site_url('login/validate') ;?>">
 	  <?php if(isset($alerterror)) { ?>
             <div class="alert alert-danger">
