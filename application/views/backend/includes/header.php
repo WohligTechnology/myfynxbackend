@@ -75,7 +75,12 @@ $(document).ready(function(){
                 <div data-original-title="Toggle Navigation" data-placement="right" class="icon-reorder tooltips"></div>
             </div>
             <!--logo start-->
-            <a href="#" class="logo">myFynx</a>
+<!--            <a href="#" class="logo">myFynx</a>-->
+          <div class="col-xs-3">
+                <div class="logo">
+                    <img src="<?php echo base_url('uploads/logo.png'); ?>" width="50" style="padding-top: 12px;">
+                </div>
+            </div>
             <!--logo end-->
             <div class="top-nav ">
                 <!--search & user info start-->
