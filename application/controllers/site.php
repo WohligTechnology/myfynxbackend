@@ -658,6 +658,9 @@ class Site extends CI_Controller
 		$data['visibility']=$this->product_model->getvisibility();
         $data['brand']=$this->brand_model->getbranddropdown();
         $data['type']=$this->brand_model->gettypedropdown();
+        $data['size']=$this->size_model->getsizedropdown();
+        $data['color']=$this->color_model->getcolordropdown();
+        $data['sizechart']=$this->sizechart_model->getsizechartdropdown();
 		$data[ 'page' ] = 'createproduct';
 		$data[ 'title' ] = 'Create product';
 		$this->load->view( 'template', $data );	
@@ -690,6 +693,9 @@ class Site extends CI_Controller
             $data['subcategory']=$this->subcategory_model->getsubcategorydropdown();
 			$data['category']=$this->product_model->getcategorydropdown();
 			$data['visibility']=$this->product_model->getvisibility();
+            $data['size']=$this->size_model->getsizedropdown();
+            $data['color']=$this->color_model->getcolordropdown();
+            $data['sizechart']=$this->sizechart_model->getsizechartdropdown();
 			$data[ 'page' ] = 'createproduct';
 			$data[ 'title' ] = 'Create product';
 			$this->load->view('template',$data);
@@ -739,12 +745,13 @@ class Site extends CI_Controller
 			$size=$this->input->post('size');
 			$typename=$this->input->post('typename');
 			$subcategory=$this->input->post('subcategory');
+			$sizechart=$this->input->post('sizechart');
             
 			if($specialpricefrom != "")
 				$specialpricefrom = date("Y-m-d",strtotime($specialpricefrom));
 			if($specialpriceto != "")
 				$specialpriceto = date("Y-m-d",strtotime($specialpriceto));
-			if($this->product_model->createproduct($name,$sku,$description,$url,$visibility,$price,$wholesaleprice,$firstsaleprice,$secondsaleprice,$specialpricefrom,$specialpriceto,$metatitle,$metadesc,$metakeyword,$quantity,$status,$category,$relatedproduct,$brand,$type,$modelnumber,$brandcolor,$eanorupc,$eanorupcmeasuringunits,$compatibledevice,$compatiblewith,$material,$color,$width,$height,$depth,$salespackage,$keyfeatures,$videourl,$modelname,$finish,$weight,$domesticwarranty,$warrantysummary,$size,$typename,$subcategory)==0)
+			if($this->product_model->createproduct($name,$sku,$description,$url,$visibility,$price,$wholesaleprice,$firstsaleprice,$secondsaleprice,$specialpricefrom,$specialpriceto,$metatitle,$metadesc,$metakeyword,$quantity,$status,$category,$relatedproduct,$brand,$type,$modelnumber,$brandcolor,$eanorupc,$eanorupcmeasuringunits,$compatibledevice,$compatiblewith,$material,$color,$width,$height,$depth,$salespackage,$keyfeatures,$videourl,$modelname,$finish,$weight,$domesticwarranty,$warrantysummary,$size,$typename,$subcategory,$sizechart)==0)
 			$data['alerterror']="New product could not be created.";
 			else
 			$data['alertsuccess']="product  created Successfully.";
@@ -839,6 +846,7 @@ class Site extends CI_Controller
 		$access = array("1");
 		$this->checkaccess($access);
 		$data['before']=$this->product_model->beforeeditproduct($this->input->get('id'));
+//        print_r($data['before']);
 		$data[ 'status' ] =$this->product_model->getstatusdropdown();
 		$data['relatedproduct']=$this->product_model->getproductdropdown();
         $data['subcategory']=$this->subcategory_model->getsubcategorydropdown();
@@ -848,7 +856,9 @@ class Site extends CI_Controller
         $data['selectedbrand']=$this->brand_model->getbrandbyproduct($this->input->get_post('id'));
         $data['type']=$this->brand_model->gettypedropdown();
         $data['selectedtype']=$this->brand_model->gettypebyproduct($this->input->get_post('id'));
-     
+        $data['size']=$this->size_model->getsizedropdown();
+        $data['color']=$this->color_model->getcolordropdown();
+        $data['sizechart']=$this->sizechart_model->getsizechartdropdown();
 		$data['page']='editproduct';
 		$data['page2']='block/productblock';
 		$data['title']='Edit product';
@@ -882,6 +892,9 @@ class Site extends CI_Controller
         $data['brand']=$this->brand_model->getbranddropdown();
             $data['subcategory']=$this->subcategory_model->getsubcategorydropdown();
         $data['selectedbrand']=$this->brand_model->getbrandbyproduct($this->input->get_post('id'));
+            $data['size']=$this->size_model->getsizedropdown();
+        $data['color']=$this->color_model->getcolordropdown();
+        $data['sizechart']=$this->sizechart_model->getsizechartdropdown();
 			$data['before']=$this->product_model->beforeeditproduct($this->input->post('id'));
 			$data['page']='editproduct';
 			$data['page2']='block/productblock';
@@ -940,8 +953,8 @@ class Site extends CI_Controller
 			$size=$this->input->post('size');
             $typename=$this->input->post('typename');
             $subcategory=$this->input->post('subcategory');
-            
-			if($this->product_model->editproduct($id,$name,$sku,$description,$url,$visibility,$price,$wholesaleprice,$firstsaleprice,$secondsaleprice,$specialpricefrom,$specialpriceto,$metatitle,$metadesc,$metakeyword,$quantity,$status,$category,$relatedproduct,$brand,$type,$modelnumber,$brandcolor,$eanorupc,$eanorupcmeasuringunits,$compatibledevice,$compatiblewith,$material,$color,$width,$height,$depth,$salespackage,$keyfeatures,$videourl,$modelname,$finish,$weight,$domesticwarranty,$warrantysummary,$size,$typename,$subcategory)==0)
+            $sizechart=$this->input->post('sizechart');
+			if($this->product_model->editproduct($id,$name,$sku,$description,$url,$visibility,$price,$wholesaleprice,$firstsaleprice,$secondsaleprice,$specialpricefrom,$specialpriceto,$metatitle,$metadesc,$metakeyword,$quantity,$status,$category,$relatedproduct,$brand,$type,$modelnumber,$brandcolor,$eanorupc,$eanorupcmeasuringunits,$compatibledevice,$compatiblewith,$material,$color,$width,$height,$depth,$salespackage,$keyfeatures,$videourl,$modelname,$finish,$weight,$domesticwarranty,$warrantysummary,$size,$typename,$subcategory,$sizechart)==0)
 			$data['alerterror']="product Editing was unsuccesful";
 			else
 			$data['alertsuccess']="product edited Successfully.";
@@ -5490,6 +5503,339 @@ class Site extends CI_Controller
 		$this->load->view('template',$data);
 	}
     
+    
+    
+    // colors
+    
+     public function viewcolor()
+    {
+        $access=array("1");
+        $this->checkaccess($access);
+        $data["page"]="viewcolor";
+        $data["base_url"]=site_url("site/viewcolorjson");
+        $data["title"]="View color";
+        $this->load->view("template",$data);
+    }
+    function viewcolorjson()
+    {
+        $elements=array();
+        $elements[0]=new stdClass();
+        $elements[0]->field="`color`.`id`";
+        $elements[0]->sort="1";
+        $elements[0]->header="ID";
+        $elements[0]->alias="id";
+        
+        $elements[1]=new stdClass();
+        $elements[1]->field="`color`.`name`";
+        $elements[1]->sort="1";
+        $elements[1]->header="name";
+        $elements[1]->alias="name";
+        
+        
+        $search=$this->input->get_post("search");
+        $pageno=$this->input->get_post("pageno");
+        $orderby=$this->input->get_post("orderby");
+        $orderorder=$this->input->get_post("orderorder");
+        $maxrow=$this->input->get_post("maxrow");
+        if($maxrow=="")
+        {
+            $maxrow=20;
+        }
+        if($orderby=="")
+        {
+            $orderby="id";
+            $orderorder="ASC";
+        }
+        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `color`");
+        $this->load->view("json",$data);
+    }
+
+	public function createcolor()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data[ 'page' ] = 'createcolor';
+		$data[ 'title' ] = 'Create color';
+		$this->load->view( 'template', $data );	
+	}
+	function createcolorsubmit()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+			$name=$this->input->post('name');
+			if($this->color_model->createcolor($name)==0)
+			$data['alerterror']="New color could not be created.";
+			else
+			$data['alertsuccess']="color  created Successfully.";
+			$data['redirect']="site/viewcolor";
+			$this->load->view("redirect",$data);
+		}
+	
+	function editcolor()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data['before']=$this->color_model->beforeeditcolor($this->input->get('id'));
+		$data['page']='editcolor';
+		$data['title']='Edit color';
+		$this->load->view('template',$data);
+	}
+	function editcolorsubmit()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+			$id=$this->input->post('id');
+			$name=$this->input->post('name');
+            
+			if($this->color_model->editcolor($id,$name)==0)
+			$data['alerterror']="color Editing was unsuccesful";
+			else
+			$data['alertsuccess']="color edited Successfully.";
+			$data['redirect']="site/viewcolor";
+			$this->load->view("redirect",$data);
+		
+	}
+	function deletecolor()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$this->color_model->deletecolor($this->input->get('id'));
+		$data['alertsuccess']="color Deleted Successfully";
+        $data['redirect']="site/viewcolor";
+        $this->load->view("redirect",$data);
+	}  
+    
+    // SIZE
+    
+    public function viewsizechart()
+    {
+        $access=array("1");
+        $this->checkaccess($access);
+        $data["page"]="viewsizechart";
+        $data["base_url"]=site_url("site/viewsizechartjson");
+        $data["title"]="View sizechart";
+        $this->load->view("template",$data);
+    }
+    function viewsizechartjson()
+    {
+        $elements=array();
+        $elements[0]=new stdClass();
+        $elements[0]->field="`sizechart`.`id`";
+        $elements[0]->sort="1";
+        $elements[0]->header="ID";
+        $elements[0]->alias="id";
+        
+        $elements[1]=new stdClass();
+        $elements[1]->field="`sizechart`.`name`";
+        $elements[1]->sort="1";
+        $elements[1]->header="name";
+        $elements[1]->alias="name";
+        
+        $elements[2]=new stdClass();
+        $elements[2]->field="`sizechart`.`image`";
+        $elements[2]->sort="1";
+        $elements[2]->header="Image";
+        $elements[2]->alias="image";
+        
+        
+        $search=$this->input->get_post("search");
+        $pageno=$this->input->get_post("pageno");
+        $orderby=$this->input->get_post("orderby");
+        $orderorder=$this->input->get_post("orderorder");
+        $maxrow=$this->input->get_post("maxrow");
+        if($maxrow=="")
+        {
+            $maxrow=20;
+        }
+        if($orderby=="")
+        {
+            $orderby="id";
+            $orderorder="ASC";
+        }
+        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `sizechart`");
+        $this->load->view("json",$data);
+    }
+
+	public function createsizechart()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data[ 'page' ] = 'createsizechart';
+		$data[ 'title' ] = 'Create sizechart';
+		$this->load->view( 'template', $data );	
+	}
+	function createsizechartsubmit()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+			$name=$this->input->post('name');
+        $config['upload_path'] = './uploads/';
+			$config['allowed_types'] = 'gif|jpg|png|jpeg';
+			$this->load->library('upload', $config);
+			$filename="image";
+			$image="";
+			if (  $this->upload->do_upload($filename))
+			{
+				$uploaddata = $this->upload->data();
+				$image=$uploaddata['file_name'];
+			}
+			if($this->sizechart_model->createsizechart($name,$image)==0)
+			$data['alerterror']="New sizechart could not be created.";
+			else
+			$data['alertsuccess']="sizechart  created Successfully.";
+			$data['redirect']="site/viewsizechart";
+			$this->load->view("redirect",$data);
+		}
+	
+	function editsizechart()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data['before']=$this->sizechart_model->beforeeditsizechart($this->input->get('id'));
+		$data['page']='editsizechart';
+		$data['title']='Edit sizechart';
+		$this->load->view('template',$data);
+	}
+	function editsizechartsubmit()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+			$id=$this->input->post('id');
+			$name=$this->input->post('name');
+            $config['upload_path'] = './uploads/';
+			$config['allowed_types'] = 'gif|jpg|png|jpeg';
+			$this->load->library('upload', $config);
+			$filename="image";
+			$image="";
+			if (  $this->upload->do_upload($filename))
+			{
+				$uploaddata = $this->upload->data();
+				$image=$uploaddata['file_name'];
+			}
+            
+            if($image=="")
+            {
+            $image=$this->sizechart_model->getimagebyid($id);
+               // print_r($image);
+                $image=$image->image;
+            }
+			if($this->sizechart_model->editsizechart($id,$name,$image)==0)
+			$data['alerterror']="sizechart Editing was unsuccesful";
+			else
+			$data['alertsuccess']="sizechart edited Successfully.";
+			$data['redirect']="site/viewsizechart";
+			$this->load->view("redirect",$data);
+		
+	}
+	function deletesizechart()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$this->sizechart_model->deletesizechart($this->input->get('id'));
+		$data['alertsuccess']="sizechart Deleted Successfully";
+        $data['redirect']="site/viewsizechart";
+        $this->load->view("redirect",$data);
+	}
+    
+    // SIZE 
+    
+       public function viewsize()
+    {
+        $access=array("1");
+        $this->checkaccess($access);
+        $data["page"]="viewsize";
+        $data["base_url"]=site_url("site/viewsizejson");
+        $data["title"]="View size";
+        $this->load->view("template",$data);
+    }
+    function viewsizejson()
+    {
+        $elements=array();
+        $elements[0]=new stdClass();
+        $elements[0]->field="`size`.`id`";
+        $elements[0]->sort="1";
+        $elements[0]->header="ID";
+        $elements[0]->alias="id";
+        
+        $elements[1]=new stdClass();
+        $elements[1]->field="`size`.`name`";
+        $elements[1]->sort="1";
+        $elements[1]->header="name";
+        $elements[1]->alias="name";
+        
+        
+        $search=$this->input->get_post("search");
+        $pageno=$this->input->get_post("pageno");
+        $orderby=$this->input->get_post("orderby");
+        $orderorder=$this->input->get_post("orderorder");
+        $maxrow=$this->input->get_post("maxrow");
+        if($maxrow=="")
+        {
+            $maxrow=20;
+        }
+        if($orderby=="")
+        {
+            $orderby="id";
+            $orderorder="ASC";
+        }
+        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `size`");
+        $this->load->view("json",$data);
+    }
+
+	public function createsize()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data[ 'page' ] = 'createsize';
+		$data[ 'title' ] = 'Create size';
+		$this->load->view( 'template', $data );	
+	}
+	function createsizesubmit()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+			$name=$this->input->post('name');
+			if($this->size_model->createsize($name)==0)
+			$data['alerterror']="New size could not be created.";
+			else
+			$data['alertsuccess']="size  created Successfully.";
+			$data['redirect']="site/viewsize";
+			$this->load->view("redirect",$data);
+		}
+	
+	function editsize()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data['before']=$this->size_model->beforeeditsize($this->input->get('id'));
+		$data['page']='editsize';
+		$data['title']='Edit size';
+		$this->load->view('template',$data);
+	}
+	function editsizesubmit()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+			$id=$this->input->post('id');
+			$name=$this->input->post('name');
+            
+			if($this->size_model->editsize($id,$name)==0)
+			$data['alerterror']="size Editing was unsuccesful";
+			else
+			$data['alertsuccess']="size edited Successfully.";
+			$data['redirect']="site/viewsize";
+			$this->load->view("redirect",$data);
+		
+	}
+	function deletesize()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$this->size_model->deletesize($this->input->get('id'));
+		$data['alertsuccess']="size Deleted Successfully";
+        $data['redirect']="site/viewsize";
+        $this->load->view("redirect",$data);
+	}  
     
 }
 

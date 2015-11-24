@@ -25,7 +25,7 @@ class Product_model extends CI_Model
 //        $query=$this->db->query("INSERT INTO `userwishlist`(`user`,`product`) VALUES ('$user','$product')");
 //        return $query;
     }
-	public function createproduct($name,$sku,$description,$url,$visibility,$price,$wholesaleprice,$firstsaleprice,$secondsaleprice,$specialpricefrom,$specialpriceto,$metatitle,$metadesc,$metakeyword,$quantity,$status,$category,$relatedproduct,$brand,$type,$modelnumber,$brandcolor,$eanorupc,$eanorupcmeasuringunits,$compatibledevice,$compatiblewith,$material,$color,$width,$height,$depth,$salespackage,$keyfeatures,$videourl,$modelname,$finish,$weight,$domesticwarranty,$warrantysummary,$size,$typename,$subcategory)
+	public function createproduct($name,$sku,$description,$url,$visibility,$price,$wholesaleprice,$firstsaleprice,$secondsaleprice,$specialpricefrom,$specialpriceto,$metatitle,$metadesc,$metakeyword,$quantity,$status,$category,$relatedproduct,$brand,$type,$modelnumber,$brandcolor,$eanorupc,$eanorupcmeasuringunits,$compatibledevice,$compatiblewith,$material,$color,$width,$height,$depth,$salespackage,$keyfeatures,$videourl,$modelname,$finish,$weight,$domesticwarranty,$warrantysummary,$size,$typename,$subcategory,$sizechart)
 	{
 		$data  = array(
 			'name' => $name,
@@ -67,7 +67,8 @@ class Product_model extends CI_Model
 			'typename' => $typename,
 			'subcategory' => $subcategory,
 			'type' => $type,
-			'category' => $category
+			'category' => $category,
+			'sizechart' => $sizechart
 		);
 		$query=$this->db->insert( 'product', $data );
 		$id=$this->db->insert_id();
@@ -220,7 +221,8 @@ class Product_model extends CI_Model
 			'size' => $size,
 			'typename' => $typename,
 			'subcategory' => $subcategory,
-			'category' => $category
+			'category' => $category,
+			'sizechart' => $sizechart
 		);
 		$this->db->where( 'id', $id );
 		$q=$this->db->update( 'product', $data );

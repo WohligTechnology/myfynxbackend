@@ -1,9 +1,5 @@
 <!--
-<div class="design">
-    <p>Total Designs :-</p>
-    <p>Total Designs Sold :-</p>
-</div>
--->
+
  <h1 class="page-header text-overflow">Total Designs :-</h1>
  <h1 class="page-header text-overflow">Total Designs Sold :-</h1>
 
@@ -40,10 +36,10 @@
     </div>
     <script>
         function drawtable(resultrow) {
-//            return "<tr><td>" + resultrow.id + "</td><td>" + resultrow.name + "</td><td><a class='btn btn-primary btn-xs' href='<?php echo site_url('site/editproduct?id=');?>" + resultrow.id + "'><i class='icon-pencil'></i></a></td></tr>"; 
             return "<tr><td>" + resultrow.id + "</td><td><a href='<?php echo site_url('site/editproduct?id=');?>" + resultrow.id + "'>" + resultrow.name + "</td><td></a></td></tr>";
         }
         generatejquery("<?php echo $base_url;?>");
     </script>
 </div>
 </div>
+-->

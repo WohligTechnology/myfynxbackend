@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="shortcut icon" href="">
-    <title>Invoice for Lyla Loves</title>
+    <title>Invoice for myFynx</title>
 
     <!-- Bootstrap core CSS -->
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
@@ -72,7 +72,7 @@
             
             <div class="col-xs-3">
                 <div class="logo">
-                    <img src="<?php echo base_url('../img/logo.jpg'); ?>" alt="" style="width:62px;height:100px;">
+                    <img src="<?php echo base_url('uploads/logo.png'); ?>">
                 </div>
             </div>
         </div>

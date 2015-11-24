@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="shortcut icon" href="">
-    <title>Invoice for Lyla Loves</title>
+    <title>Invoice for myFynx</title>
 
     <!-- Bootstrap core CSS -->
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
@@ -38,7 +38,7 @@
         <div class="row">
             <div class="col-xs-2">
                 <div class="logo">
-                    <img src="<?php echo base_url();?>../img/logo.jpg" alt="" style="width:100%;">
+                    <img src="<?php echo base_url('uploads/logo.png'); ?>">
                 </div>
             </div>
             <div class="col-xs-5"></div>
@@ -232,7 +232,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-xs-12 text-center">Thank you for shopping with Magic Mirror.</div>
+            <div class="col-xs-12 text-center">Thank you for shopping with myFynx.</div>
         </div>
     </div>
 

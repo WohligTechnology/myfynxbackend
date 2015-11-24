@@ -55,12 +55,14 @@
 						?>
 					  </div>
 					</div>
+<!--
                     <div class="form-group">
 						<label class="col-sm-2 control-label">Type Name</label>
 						<div class="col-sm-4">
 						  <input type="text" id="normal-field" class="form-control" name="typename" value="<?php echo set_value('typename',$before['product']->typename);?>">
 						</div>
 					</div>
+-->
 			
 					<div class="form-group">
 						<label class="col-sm-2 control-label">Description</label>
@@ -83,13 +85,14 @@
 						?>
 					  </div>
 					</div>
-					<div class="hidden">
+				
 					<div class="form-group">
 						<label class="col-sm-2 control-label">Price</label>
 						<div class="col-sm-4">
 						  <input type="text" id="normal-field" class="form-control" name="price" value="<?php echo set_value('price',$before['product']->price);?>">
 						</div>
 					</div>
+<!--
 					<div class="form-group">
 						<label class="col-sm-2 control-label">Wholesale Price</label>
 						<div class="col-sm-4">
@@ -120,6 +123,7 @@
 						  <input type="date" id="normal-field" class="form-control" name="specialpriceto" value="<?php echo set_value('specialpriceto',$before['product']->specialpriceto);?>">
 						</div>
 					</div>
+-->
 					<div class="form-group">
 						<label class="col-sm-2 control-label">Related Product</label>
 						<div class="col-sm-4">
@@ -128,7 +132,6 @@
 								 
 							?>
 						</div>
-					</div>
 					</div>
 <!--
 					<div class="form-group">
@@ -160,6 +163,7 @@
 					  </div>
 					</div>
 					
+<!--
 					<div class="form-group">
 						<label class="col-sm-2 control-label">Meta Title</label>
 						<div class="col-sm-4">
@@ -178,6 +182,7 @@
 						  <textarea name="metakeyword" class="form-control"><?php echo set_value('metakeyword',$before['product']->metakeyword); ?></textarea>
 						</div>
 					</div>
+-->
 					<div class="form-group">
 						<label class="col-sm-2 control-label">Quantity</label>
 						<div class="col-sm-4">
@@ -185,6 +190,7 @@
 						</div>
 					</div>
 					
+<!--
 					<div class="form-group">
 						<label class="col-sm-2 control-label">Model Number</label>
 						<div class="col-sm-4">
@@ -233,14 +239,37 @@
 						  <input type="text" id="normal-field" class="form-control" name="material" value="<?php echo set_value('material',$before['product']->material);?>">
 						</div>
 					</div>
+-->
 					
-					<div class="form-group">
-						<label class="col-sm-2 control-label">color</label>
-						<div class="col-sm-4">
-						  <input type="text" id="normal-field" class="form-control" name="color" value="<?php echo set_value('color',$before['product']->color);?>">
-						</div>
+					 <div class=" form-group">
+					  <label class="col-sm-2 control-label">color</label>
+					  <div class="col-sm-4">
+						<?php
+							
+							echo form_dropdown('color',$color,set_value('color',$before['product']->color),'class="chzn-select form-control" 	data-placeholder="Choose a Accesslevel..."');
+						?>
+					  </div>
+					</div> 
+                    <div class=" form-group">
+					  <label class="col-sm-2 control-label">size</label>
+					  <div class="col-sm-4">
+						<?php
+							
+							echo form_dropdown('size',$size,set_value('size',$before['product']->size),'class="chzn-select form-control" 	data-placeholder="Choose a Accesslevel..."');
+						?>
+					  </div>
+					</div>  
+                    <div class=" form-group">
+					  <label class="col-sm-2 control-label">Size chart</label>
+					  <div class="col-sm-4">
+						<?php
+							
+							echo form_dropdown('sizechart',$sizechart,set_value('sizechart',$before['product']->sizechart),'class="chzn-select form-control" 	data-placeholder="Choose a Accesslevel..."');
+						?>
+					  </div>
 					</div>
 					
+<!--
 					<div class="form-group">
 						<label class="col-sm-2 control-label">width</label>
 						<div class="col-sm-4">
@@ -317,13 +346,16 @@
 						  <input type="text" id="normal-field" class="form-control" name="warrantysummary" value="<?php echo set_value('warrantysummary',$before['product']->warrantysummary);?>">
 						</div>
 					</div>
-					
+-->					
+<!--
 					<div class="form-group">
 						<label class="col-sm-2 control-label">size</label>
 						<div class="col-sm-4">
 						  <input type="text" id="normal-field" class="form-control" name="size" value="<?php echo set_value('size',$before['product']->size);?>">
 						</div>
 					</div>
+-->
+
 					
 					
 					<div class=" form-group">
@@ -335,6 +367,17 @@
 						?>
 					  </div>
 					</div>
+<!--
+                     <div class=" form-group">
+					  <label class="col-sm-2 control-label">Size Chart</label>
+					  <div class="col-sm-4">
+						<?php
+							
+							echo form_dropdown('sizechart',$sizechart,set_value('sizechart',$before['product']->sizechart),'class="chzn-select form-control" 	data-placeholder="Choose a Accesslevel..."');
+						?>
+					  </div>
+					</div>
+-->
 					
 					<div class="form-group">
 						<label class="col-sm-2 control-label">&nbsp;</label>
